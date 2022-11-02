@@ -74,6 +74,22 @@ const createUserTaskTable = async () => {
     }
 }
 
+const createActivitytTable = async () => {
+    try {
+        const activityTableQuery = `
+        CREATE TABLE IF NOT EXISTS activities(
+        id VARCHAR(80) UNIQUE NOT NULL,
+        "activity VARCHAR(100) NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        PRIMARY KEY(id)
+        );`
+
+        await db.query(activityTableQuery);
+    } catch (error: any) {
+        console.log("activitytable: " + error.message);
+    }
+};
+
 const populateUsers = async () => {
     try {
 

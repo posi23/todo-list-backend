@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import bodyParser from "body-parser";
 import cors from "cors";
 import routes from './routes';
-import { initializeDB, populateUsers } from './functions';
+import { initializeDB } from './functions';
 
 const app = express();
 const port = process.env.PORT || 8080;

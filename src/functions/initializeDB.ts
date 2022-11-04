@@ -21,7 +21,7 @@ const createUserTable = async () => {
     try {
         const userTableQuery = `
         CREATE TABLE IF NOT EXISTS users(
-        uid VARCHAR(4) UNIQUE NOT NULL,
+        uid INT UNIQUE NOT NULL,
         fullname VARCHAR(100) NOT NULL,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -39,9 +39,11 @@ const createTaskListTable = async () => {
     try {
         const taskListTableQuery = `
         CREATE TABLE IF NOT EXISTS tasks(
-        id VARCHAR(80) UNIQUE NOT NULL,
+        id BIGSERIAL,
         "taskName" VARCHAR(100) NOT NULL,
         description VARCHAR(200),
+        completed BOOLEAN NOT NULL DEFAULT false,
+        "dueDate" TIMESTAMPTZ NOT NULL,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         PRIMARY KEY(id)
@@ -58,8 +60,8 @@ const createUserTaskTable = async () => {
     try {
         const query = `
         CREATE TABLE IF NOT EXISTS "user_task" (
-        uid VARCHAR(48) NOT NULL,
-        "taskId" VARCHAR(48) NOT NULL,
+        uid INT NOT NULL,
+        "taskId" INT NOT NULL,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         PRIMARY KEY(uid, "taskId"),
@@ -78,8 +80,8 @@ const createActivitytTable = async () => {
     try {
         const activityTableQuery = `
         CREATE TABLE IF NOT EXISTS activities(
-        id VARCHAR(80) UNIQUE NOT NULL,
-        "activity VARCHAR(100) NOT NULL,
+        id BIGSERIAL,
+        activity VARCHAR(100) NOT NULL,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         PRIMARY KEY(id)
         );`
@@ -105,16 +107,16 @@ const populateUsers = async () => {
         const populateUsersQuery = `
     INSERT INTO users (uid, fullname)
     VALUES
-    ('1', 'Posi Adeyemi'),
-    ('2', 'Andrew Schultz'),
-    ('3', 'Reece James'),
-    ('4', 'Michael Jack'),
-    ('5', 'Israel Sanya'),
-    ('6', 'Uniz Draya'),
-    ('7', 'Maya Andrews'),
-    ('8', 'Nick Justin'),
-    ('9', 'Ayo Sadiq'),
-    ('10','Harry Lenglet');`;
+    (1, 'Posi Adeyemi'),
+    (2, 'Andrew Schultz'),
+    (3, 'Reece James'),
+    (4, 'Michael Jack'),
+    (5, 'Israel Sanya'),
+    (6, 'Uniz Draya'),
+    (7, 'Maya Andrews'),
+    (8, 'Nick Justin'),
+    (9, 'Ayo Sadiq'),
+    (10,'Harry Lenglet');`;
 
         await db.query(populateUsersQuery);
     } catch (error: any) {
@@ -136,5 +138,6 @@ export const initializeDB = async () => {
     await createUserTable(); // create user table
     await createTaskListTable(); // create table for the task lists
     await createUserTaskTable(); // create table to keep records of users assigned to a task
+    await createActivitytTable();
     await populateUsers(); // insert some hard coded user values into the user table
 };

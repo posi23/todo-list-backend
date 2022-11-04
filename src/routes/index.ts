@@ -1,6 +1,7 @@
 import express from 'express';
 import healthRoute from './health.routes';
 import userRoute from "./user.routes";
+import taskRoute from "./task.routes";
 
 const router = express.Router();
 
@@ -13,6 +14,11 @@ const allRoutes = [
     {
         path: "/user",
         route: userRoute,
+    },
+
+    {
+        path: "/task",
+        route: taskRoute,
     },
 ];
 

@@ -5,7 +5,7 @@ const db_config: PoolConfig = {
     host: config.database.HOST,
     port: config.database.PORT,
     database: config.database.DATABASE,
-    password: config.database.PASSWORD,
+    // password: config.database.PASSWORD,
     user: config.database.USER,
 };
 

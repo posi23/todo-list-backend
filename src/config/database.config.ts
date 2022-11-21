@@ -31,6 +31,9 @@ const db_config: PoolConfig = process.env.DATABASE_URL ? {
     host: params.hostname!,
     port: Number(params.port),
     database: params.pathname?.split('/')[1],
+    ssl: {
+        rejectUnauthorized: false
+    },
 } :
     {
         host: config.database.HOST,

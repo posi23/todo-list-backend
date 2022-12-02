@@ -5,32 +5,20 @@ import url from 'url';
 
 const dbString: string = process.env.DATABASE_URL!;
 
-const params = url.parse(dbString);
-const auth = params.auth?.split(':');
 
-// const config2: PoolConfig = {
-//     user: auth && auth[0],
-//     password: auth && auth[1],
-//     host: params.hostname!,
-//     port: Number(params.port),
-//     database: params.pathname?.split('/')[1],
-//     ssl: true
-// };
-
-// const db_config: PoolConfig = {
-//     host: config.database.HOST,
-//     port: config.database.PORT,
-//     database: config.database.DATABASE,
-//     // password: config.database.PASSWORD,
-//     user: config.database.USER,
-// };
+let params: url.UrlWithStringQuery | undefined;
+let auth: string[] | undefined;
+if (dbString) {
+    params = url.parse(dbString);
+    auth = params.auth?.split(':');
+}
 
 const db_config: PoolConfig = process.env.DATABASE_URL ? {
     user: auth && auth[0],
     password: auth && auth[1],
-    host: params.hostname!,
-    port: Number(params.port),
-    database: params.pathname?.split('/')[1],
+    host: params && params.hostname!,
+    port: params && Number(params.port),
+    database: params && params.pathname?.split('/')[1],
     ssl: {
         rejectUnauthorized: false
     },
@@ -39,7 +27,6 @@ const db_config: PoolConfig = process.env.DATABASE_URL ? {
         host: config.database.HOST,
         port: config.database.PORT,
         database: config.database.DATABASE,
-        // password: config.database.PASSWORD,
         user: config.database.USER,
     }
 

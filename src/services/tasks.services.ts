@@ -19,7 +19,7 @@ const addTask = async (taskName: string, description: string, dueDate: string, a
             await db.query(addAssigneeQuery, [assigneeId, rows[0].id]);
         });
 
-        return rows[0];
+        return { ...rows[0], assignees: assignees };
     } catch (error: any) {
         throw new ApiError(httpStatus.BAD_REQUEST, error.message);
     }

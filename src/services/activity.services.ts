@@ -19,7 +19,6 @@ const getAllActivity = async () => {
     try {
         const getAllActivityQuery = `SELECT activity, read, created_at FROM activities`
         const { rows } = await db.query(getAllActivityQuery);
-        console.log(rows);
         return rows;
     } catch (error: any) {
         throw new ApiError(httpStatus.BAD_REQUEST, error.message);

@@ -66,8 +66,8 @@ const deleteTask = async (taskId: number) => {
         const removeUserTaskQuery = `DELETE FROM user_task
         WHERE "taskId"=$1;`
 
-        await db.query(deleteQuery, [taskId]);
         await db.query(removeUserTaskQuery, [taskId]);
+        await db.query(deleteQuery, [taskId]);
 
         return true;
 

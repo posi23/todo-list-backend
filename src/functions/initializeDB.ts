@@ -23,13 +23,11 @@ const createUserTable = async () => {
         CREATE TABLE IF NOT EXISTS users(
         uid INT UNIQUE NOT NULL,
         fullname VARCHAR(100) NOT NULL,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         PRIMARY KEY(uid)
         );`
 
         await db.query(userTableQuery);
-        await createUpdateTimestampTrigger("users");
+        // await createUpdateTimestampTrigger("users");
     } catch (error: any) {
         console.log("usertable: " + error.message);
     }
@@ -44,13 +42,11 @@ const createTaskListTable = async () => {
         description VARCHAR(200),
         completed BOOLEAN NOT NULL DEFAULT false,
         "dueDate" TIMESTAMPTZ NOT NULL,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         PRIMARY KEY(id)
         );`
 
         await db.query(taskListTableQuery);
-        await createUpdateTimestampTrigger("tasks");
+        // await createUpdateTimestampTrigger("tasks");
     } catch (error: any) {
         console.log("tasklist: " + error.message);
     }
@@ -62,28 +58,25 @@ const createUserTaskTable = async () => {
         CREATE TABLE IF NOT EXISTS "user_task" (
         uid INT NOT NULL,
         "taskId" INT NOT NULL,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         PRIMARY KEY(uid, "taskId"),
         FOREIGN KEY(uid) REFERENCES users(uid),
         FOREIGN KEY("taskId") REFERENCES tasks(id)
         );`;
 
         await db.query(query);
-        await createUpdateTimestampTrigger("user_task")
+        // await createUpdateTimestampTrigger("user_task")
     } catch (error: any) {
         console.log("usertask: " + error.message);
     }
 }
 
-const createActivitytTable = async () => {
+const createActivityTable = async () => {
     try {
         const activityTableQuery = `
         CREATE TABLE IF NOT EXISTS activities(
         id BIGSERIAL,
-        uid INT NOT NULL,
         activity VARCHAR(100) NOT NULL,
-        "taskId" INT NOT NULL,
+        read BOOLEAN NOT NULL DEFAULT false,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         PRIMARY KEY(id)
         );`
@@ -140,6 +133,6 @@ export const initializeDB = async () => {
     await createUserTable(); // create user table
     await createTaskListTable(); // create table for the task lists
     await createUserTaskTable(); // create table to keep records of users assigned to a task
-    await createActivitytTable();
+    await createActivityTable();
     await populateUsers(); // insert some hard coded user values into the user table
 };
